@@ -8,3 +8,12 @@ for (let i = 0; i < totalSquares; i++) {
   square.classList.add("square");
   gridSquaresContainer.appendChild(square);
 }
+
+const gridSquares = document.querySelectorAll(".square");
+gridSquares.forEach(
+  (square) => {
+    square.addEventListener("mouseover", () => {
+      square.classList.add("hovered-square");
+    });
+  }
+);
