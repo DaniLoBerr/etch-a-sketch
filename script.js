@@ -1,13 +1,19 @@
 const gridSquaresContainer = document.querySelector("#grid-squares-container");
-let squaresPerSide = 0;
+const gridContainerSideSizeInPx = 600;
 
-function changeGrid(newSquaresPerSide) {
-  squaresPerSide = newSquaresPerSide;
-  totalSquares = squaresPerSide ** 2;
+// To get random colors when the hover effect occurs
+function getRandomRgbValue(min = 0, max = 255) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+function createGrid(squaresPerSide) {
+  const totalSquares = squaresPerSide ** 2;
+  const squareProportion = gridContainerSideSizeInPx / squaresPerSide;
   // Add the squares
   for (let i = 0; i < totalSquares; i++) {
     const square = document.createElement("div");
     square.classList.add("square");
+    square.setAttribute("style", `flex: 1 1 ${squareProportion}px;`);
     gridSquaresContainer.appendChild(square);
   }
   // Create the hover effect
@@ -15,7 +21,16 @@ function changeGrid(newSquaresPerSide) {
   gridSquares.forEach(
     (square) => {
       square.addEventListener("mouseover", () => {
-        square.classList.add("hovered-square");
+        // Randomize the hover color
+        square.setAttribute(
+          "style", 
+          `flex: 1 1 ${squareProportion}px; 
+          background-color: rgb(
+          ${getRandomRgbValue()},
+          ${getRandomRgbValue()},
+          ${getRandomRgbValue()}
+          )`
+        );
       });
     }
   );
@@ -31,23 +46,14 @@ function resetGrid() {
 }
 
 // Create initial 16x16 sketch pad
-changeGrid(16);
+createGrid(16);
 
 const changeGridButton = document.querySelector("#change-grid-button");
 changeGridButton.addEventListener("click", () => {
-  squaresPerSide = +prompt("How many squares per side do you want? (Max 100)");
-  if (squaresPerSide >= 1 && squaresPerSide <= 100) {
+  const newSquaresPerSide = +prompt("How many squares per side do you want? (Max 100)");
+  if (newSquaresPerSide >= 1 && newSquaresPerSide <= 100) {
     resetGrid();
-    changeGrid(squaresPerSide);
-    // Resize squares
-    const gridSquares = document.querySelectorAll(".square");
-    const gridContainerSideSizeInPixels = 600;
-    const newSquareProportion = gridContainerSideSizeInPixels / squaresPerSide;
-    gridSquares.forEach(
-      (square) => {
-        square.setAttribute("style", `flex: 1 1 ${newSquareProportion}px;`);
-      }
-    );
+    createGrid(newSquaresPerSide);
   } else {
     alert("El dato introducido no es válido");
   }
