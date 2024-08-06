@@ -9,28 +9,26 @@ function getRandomRgbValue(min = 0, max = 255) {
 function createGrid(squaresPerSide) {
   const totalSquares = squaresPerSide ** 2;
   const squareProportion = gridContainerSideSizeInPx / squaresPerSide;
-  // Add the squares
+  // To add the squares to the grid container
   for (let i = 0; i < totalSquares; i++) {
     const square = document.createElement("div");
     square.classList.add("square");
     square.setAttribute("style", `flex: 1 1 ${squareProportion}px;`);
     gridSquaresContainer.appendChild(square);
   }
-  // Create the hover effect
+  // To create the hover effect
   const gridSquares = document.querySelectorAll(".square");
   gridSquares.forEach(
     (square) => {
       square.addEventListener("mouseover", () => {
-        // Randomize the hover color
-        square.setAttribute(
-          "style", 
-          `flex: 1 1 ${squareProportion}px; 
-          background-color: rgb(
-          ${getRandomRgbValue()},
-          ${getRandomRgbValue()},
-          ${getRandomRgbValue()}
-          )`
-        );
+        square.style.flex = `1 1 ${squareProportion}px`;
+        // To randomize the hover color
+        square.style.backgroundColor = `rgb(
+        ${getRandomRgbValue()},
+        ${getRandomRgbValue()},
+        ${getRandomRgbValue()})`;
+        // To get a darkening effect
+        square.style.opacity = `${+square.style.opacity + 0.1}`;
       });
     }
   );
@@ -48,6 +46,7 @@ function resetGrid() {
 // Create initial 16x16 sketch pad
 createGrid(16);
 
+// To give the functionality to the "change grid" button
 const changeGridButton = document.querySelector("#change-grid-button");
 changeGridButton.addEventListener("click", () => {
   const newSquaresPerSide = +prompt("How many squares per side do you want? (Max 100)");
